@@ -50,8 +50,28 @@ public class SpellChecker {
      *  prints that value out before returning.
      */
     public boolean binarySpellCheck(String word) {
+        loopCounter = 0;  
+        int left = 0, right = dictionary.size() - 1;
+    
+        while (left <= right) {
+            loopCounter++;  
+            int mid = left + (right - left) / 2;
+            String midWord = dictionary.get(mid);
+    
+            if (midWord.equals(word)) {
+                System.out.println("-- BINARY SEARCH: Number of words checked (loop iterations): " + loopCounter);
+                return true;
+            } else if (midWord.compareTo(word) < 0) {
+                left = mid + 1; 
+            } else {
+                right = mid - 1; 
+            }
+        }
+    
+        System.out.println("-- BINARY SEARCH: Number of words checked (loop iterations): " + loopCounter);
         return false;
     }
+    
 
     // private helper method, called in the constructor, which loads the words
     // from the dictionary.txt text file into the "dictionary" instance variable!
@@ -63,11 +83,16 @@ public class SpellChecker {
                 String data = fileScanner.nextLine();
                 dictionary.add(data);
             }
-            System.out.println("\ndictionary.txt file imported successfully!");
+            fileScanner.close();
+            
+            dictionary.sort(String::compareTo);
+    
+            System.out.println("\ndictionary.txt file imported successfully and sorted!");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
+    
 
     public static void main(String[] args) {
         SpellChecker checker = new SpellChecker();
